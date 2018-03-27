@@ -29,6 +29,25 @@
 
 */
 
+
+#include <ArduinoJson.h>
+#include <BLEDevice.h>
+#include <BLEServer.h>
+#include <BLEUtils.h>
+#include <BLE2902.h>
+#include <BLEUUID.h>
+
+#define JSON_BUFF_SIZE 256
+#define CLIENT_MSG_BUFF_SIZE 256
+
+#define PIN_LED     5
+#define TIMEOUT_LED 500
+
+
+
+
+
+
 #define DEVICE_NAME              "Smart Jacket Test"
 
 #define UUID_SERVICE             "E708EB00-AD98-4158-B7C2-A748744694AB"
@@ -37,6 +56,50 @@
 #define UUID_CHARACT_STATE       "E708EB03-AD98-4158-B7C2-A748744694AB"
 #define UUID_CHARACT_CLIENT_CMD  "E708EB04-AD98-4158-B7C2-A748744694AB"
 #define UUID_CHARACT_SERVER_MSG  "E708EB05-AD98-4158-B7C2-A748744694AB"
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+/// JACKET BLE GLOBALS ////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+BLEServer         *pJacketServer;
+BLEService        *pJacketService;
+BLECharacteristic *pJacketCharactTimestamp;
+BLECharacteristic *pJacketCharactPlanName;
+BLECharacteristic *pJacketCharactState;
+BLECharacteristic *pJacketCharactClientCmd;
+BLECharacteristic *pJacketCharactServerMsg;
+
+bool deviceConnected = false;
+
+///////////////////////////////////////////////////////////////////////////////////////////
+/// GLOBALS ///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+#define PLAN_STATE_NONE    0
+#define PLAN_STATE_READY   1
+#define PLAN_STATE_STARTED 2
+#define PLAN_STATE_PAUSED  3
+#define PLAN_STATE_ENDED   4
+
+#define CTRL_MODE_NONE  0
+#define CTRL_MODE_MUSIC 1
+#define CTRL_MODE_CALL  2
+
+unsigned long timeLastRx = 0;
+unsigned long timeLastProgress = 0;  // for simulation purposes
+
+String  currPlanName  = "";
+uint8_t currPlanState = PLAN_STATE_NONE;
+uint8_t currPhase     = 0;
+uint8_t currProgress  = 0;
+uint8_t currCtrlMode  = CTRL_MODE_NONE;
+
+int currBattLevel = 50;
+
+char buffClientMsg [CLIENT_MSG_BUFF_SIZE];
+boolean hasClientMessage = false;
+
 
 
 
