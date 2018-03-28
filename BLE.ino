@@ -29,14 +29,6 @@
 
 */
 
-
-#include <ArduinoJson.h>
-#include <BLEDevice.h>
-#include <BLEServer.h>
-#include <BLEUtils.h>
-#include <BLE2902.h>
-#include <BLEUUID.h>
-
 #define JSON_BUFF_SIZE 256
 #define CLIENT_MSG_BUFF_SIZE 256
 
